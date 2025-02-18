@@ -6,36 +6,34 @@ use App\Repository\PersonneRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 
 
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
-class Personne
+class Personne implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-//relation entre personne et trajet 
-#[ORM\OneToMany(mappedBy: "personne", targetEntity: Trajet::class)]
-private Collection $trajetsProposes;
+    //relation entre personne et trajet 
+    #[ORM\OneToMany(mappedBy: "personne", targetEntity: Trajet::class)]
+    private Collection $trajetsProposes;
 
 
-#[ORM\ManyToMany(targetEntity: Trajet::class, inversedBy: 'passagers')]
-#[ORM\JoinTable(name: 'reservations')]
-private Collection $trajetsReserves;
+    #[ORM\ManyToMany(targetEntity: Trajet::class, inversedBy: 'passagers')]
+    #[ORM\JoinTable(name: 'reservations')]
+    private Collection $trajetsReserves;
 
 
-
-
-
-public function __construct()
-{
-    $this->trajetsProposes = new ArrayCollection();
-    $this->trajetsReserves = new ArrayCollection();
-    
-}
+    public function __construct()
+    {
+        $this->trajetsProposes = new ArrayCollection();
+        $this->trajetsReserves = new ArrayCollection();
+    }
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $prenom = null;
@@ -54,6 +52,9 @@ public function __construct()
 
     #[ORM\Column(length: 255)]
     private ?string $mdp = null;
+
+    #[ORM\Column(length: 255, unique: true, nullable: true)]
+    private ?string $apiToken;
 
     public function getId(): ?int
     {
@@ -185,4 +186,39 @@ public function __construct()
 
         return $this;
     }
+
+    public function getRoles(): array
+    {
+        // Return the roles (by default, every user should have at least 'ROLE_USER')
+        return ['ROLE_USER'];
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->mdp;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email; // Or return another unique identifier like $this->pseudo
+    }
+
+    public function eraseCredentials(): void
+    {
+        // If you store temporary sensitive data, clear it here (not needed for hashed passwords)
+    }
+
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken(?string $apiToken): static
+    {
+        $this->apiToken = $apiToken;
+
+        return $this;
+    }
+
+    
 }
