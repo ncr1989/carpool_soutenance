@@ -1,9 +1,11 @@
 lexik_jwt_authentication:
-    secret_key: '%kernel.project_dir%/config/jwt/private.pem'   # Path to your private key
-    public_key: '%kernel.project_dir%/config/jwt/public.pem'   # Path to your public key
-    pass_phrase: 'your_passphrase'  # The passphrase for your private key (if you used one)
-    token_ttl: 3600
-    authorization_header:
-        enabled: true    # The Authorization header will be used by default (Bearer token)
-    query_parameter:
-        enabled: false 
+    secret_key: '%kernel.project_dir%/config/jwt/private.pem'
+    public_key: '%kernel.project_dir%/config/jwt/public.pem'
+    pass_phrase: '%env(JWT_PASSPHRASE)%'
+    token_ttl: 3600  # Token expires in 1 hour
+    token_extractors:
+        authorization_header: 
+            enabled: true
+            name: x-auth-token  # Specify the name of the header you want to use
+            prefix: ''
+        

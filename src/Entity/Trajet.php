@@ -25,13 +25,13 @@ class Trajet
     #[ORM\Column]
     private ?bool $conducteur = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateTrajet = null;
 
      // Relations entre trajet et personne
      #[ORM\ManyToOne(targetEntity: Personne::class, inversedBy:"trajetsProposes")]
      #[ORM\JoinColumn(name: "personne_id", referencedColumnName: "id", nullable: false)]
-     private ?Personne $personne = null;
+     private $personne = null;
 
      #[ORM\ManyToOne(targetEntity:Ville::class,inversedBy:"trajets")]
      #[ORM\JoinColumn(name: "ville_id", referencedColumnName: "id", nullable: false)]

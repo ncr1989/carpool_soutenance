@@ -7,9 +7,11 @@ use App\Form\PersonneType;
 use App\Repository\PersonneRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+
 
 #[Route('/personne')]
 final class PersonneController extends AbstractController
@@ -22,24 +24,35 @@ final class PersonneController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_personne_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/api/inscription', name: 'new_inscription', methods: ['POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $personne = new Personne();
-        $form = $this->createForm(PersonneType::class, $personne);
-        $form->handleRequest($request);
+        $data = $data= json_decode($request->getContent(), true);
+        $email = $data['email'];
+        $mdp = $data['mdp'];
+        $confirmMdp = $data['confirmMdp'];
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($personne);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_personne_index', [], Response::HTTP_SEE_OTHER);
+        if(empty($email) || empty($mdp) || empty($confirmMdp)){
+            return new JsonResponse(['error' => 'Remplir tous les champs!'], JsonResponse::HTTP_BAD_REQUEST); 
         }
-
-        return $this->render('personne/new.html.twig', [
-            'personne' => $personne,
-            'form' => $form,
-        ]);
+        if (!hash_equals($mdp, $confirmMdp)) {
+            return new JsonResponse(['error' => 'Mots de passes '], JsonResponse::HTTP_BAD_REQUEST);
+        }
+        
+        $existingUser = $entityManager->getRepository(Personne::class)->findOneBy(['email' => $email]);
+        if ($existingUser) {
+            return new JsonResponse(['error' => 'Cet email est déjà utilisé.'], JsonResponse::HTTP_CONFLICT);
+        }
+    
+        $personne = new Personne();
+        $hashedMdp = password_hash($mdp, PASSWORD_DEFAULT);
+        $personne->setEmail($email);
+        $personne->setMdp($hashedMdp);
+    
+        $entityManager->persist($personne);
+        $entityManager->flush();
+    
+        return new JsonResponse(['message' => 'Utilisateur inscrit avec succès!'], JsonResponse::HTTP_CREATED);
     }
 
     #[Route('/{id}', name: 'app_personne_show', methods: ['GET'])]
@@ -67,15 +80,12 @@ final class PersonneController extends AbstractController
             'form' => $form,
         ]);
     }
-
-    #[Route('/{id}', name: 'app_personne_delete', methods: ['POST'])]
-    public function delete(Request $request, Personne $personne, EntityManagerInterface $entityManager): Response
+    /*
+    #[Route('/{id}', name: 'app_personne_delete', methods: ['DELETE'])]
+    public function delete(Request $request, Personne $personne, EntityManagerInterface $entityManager): JsonResponse
     {
-        if ($this->isCsrfTokenValid('delete'.$personne->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($personne);
-            $entityManager->flush();
-        }
+        
 
-        return $this->redirectToRoute('app_personne_index', [], Response::HTTP_SEE_OTHER);
-    }
+        return 
+    }*/
 }

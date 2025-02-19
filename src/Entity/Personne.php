@@ -220,5 +220,21 @@ class Personne implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function addTrajetsReserf(Trajet $trajetsReserf): static
+    {
+        if (!$this->trajetsReserves->contains($trajetsReserf)) {
+            $this->trajetsReserves->add($trajetsReserf);
+        }
+
+        return $this;
+    }
+
+    public function removeTrajetsReserf(Trajet $trajetsReserf): static
+    {
+        $this->trajetsReserves->removeElement($trajetsReserf);
+
+        return $this;
+    }
+
     
 }
