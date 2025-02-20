@@ -53,9 +53,6 @@ class Personne implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $mdp = null;
 
-    #[ORM\Column(length: 255, unique: true, nullable: true)]
-    private ?string $apiToken;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -216,22 +213,6 @@ class Personne implements UserInterface, PasswordAuthenticatedUserInterface
     public function setApiToken(?string $apiToken): static
     {
         $this->apiToken = $apiToken;
-
-        return $this;
-    }
-
-    public function addTrajetsReserf(Trajet $trajetsReserf): static
-    {
-        if (!$this->trajetsReserves->contains($trajetsReserf)) {
-            $this->trajetsReserves->add($trajetsReserf);
-        }
-
-        return $this;
-    }
-
-    public function removeTrajetsReserf(Trajet $trajetsReserf): static
-    {
-        $this->trajetsReserves->removeElement($trajetsReserf);
 
         return $this;
     }

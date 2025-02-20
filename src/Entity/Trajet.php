@@ -16,11 +16,13 @@ class Trajet
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $villeA = null;
+    #[ORM\ManyToOne(targetEntity: Ville::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Ville $villeArrivee = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $villeD = null;
+    #[ORM\ManyToOne(targetEntity: Ville::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Ville $villeDepart = null;
 
     #[ORM\Column]
     private ?bool $conducteur = null;
@@ -28,65 +30,45 @@ class Trajet
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateTrajet = null;
 
-     // Relations entre trajet et personne
-     #[ORM\ManyToOne(targetEntity: Personne::class, inversedBy:"trajetsProposes")]
-     #[ORM\JoinColumn(name: "personne_id", referencedColumnName: "id", nullable: false)]
-     private $personne = null;
+    // Relations entre trajet et personne
+    #[ORM\ManyToOne(targetEntity: Personne::class, inversedBy:"trajetsProposes")]
+    #[ORM\JoinColumn(name: "personne_id", referencedColumnName: "id", nullable: false)]
+    private $personne = null;
 
-     #[ORM\ManyToOne(targetEntity:Ville::class,inversedBy:"trajets")]
-     #[ORM\JoinColumn(name: "ville_id", referencedColumnName: "id", nullable: false)]
-     private ?Trajet $trajet;
-
-
-     #[ORM\ManyToMany(targetEntity:Personne::class, mappedBy:"trajetReserves")]
-     private Collection $passagers;
-
-     public function __construct() {
-        $this->passagers = new ArrayCollection();
-    }
- 
-     // Getter and Setter for the Personne relation
-     public function getPersonne(): ?Personne
-     {
-         return $this->personne;
-         
-     }
- 
-     public function setPersonne(?Personne $personne): self
-     {
-         $this->personne = $personne;
-         return $this;
-     }
+    #[ORM\ManyToMany(targetEntity:Personne::class, mappedBy:"trajetsReserves")]
+    private Collection $passagers;
 
     #[ORM\Column]
     private ?int $nbrPlaces = null;
+
+    public function __construct() {
+        $this->passagers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getVilleA(): ?string
+    public function getVilleArrivee(): ?Ville
     {
-        return $this->villeA;
+        return $this->villeArrivee;
     }
 
-    public function setVilleA(string $villeA): static
+    public function setVilleArrivee(?Ville $villeArrivee): static
     {
-        $this->villeA = $villeA;
-
+        $this->villeArrivee = $villeArrivee;
         return $this;
     }
 
-    public function getVilleD(): ?string
+    public function getVilleDepart(): ?Ville
     {
-        return $this->villeD;
+        return $this->villeDepart;
     }
 
-    public function setVilleD(string $villeD): static
+    public function setVilleDepart(?Ville $villeDepart): static
     {
-        $this->villeD = $villeD;
-
+        $this->villeDepart = $villeDepart;
         return $this;
     }
 
@@ -98,7 +80,6 @@ class Trajet
     public function setConducteur(bool $conducteur): static
     {
         $this->conducteur = $conducteur;
-
         return $this;
     }
 
@@ -110,7 +91,6 @@ class Trajet
     public function setDateTrajet(\DateTimeInterface $dateTrajet): static
     {
         $this->dateTrajet = $dateTrajet;
-
         return $this;
     }
 
@@ -122,19 +102,17 @@ class Trajet
     public function setNbrPlaces(int $nbrPlaces): static
     {
         $this->nbrPlaces = $nbrPlaces;
-
         return $this;
     }
 
-    public function getTrajet(): ?Ville
+    public function getPersonne(): ?Personne
     {
-        return $this->trajet;
+        return $this->personne;
     }
 
-    public function setTrajet(?Ville $trajet): static
+    public function setPersonne(?Personne $personne): self
     {
-        $this->trajet = $trajet;
-
+        $this->personne = $personne;
         return $this;
     }
 
@@ -152,7 +130,6 @@ class Trajet
             $this->passagers->add($passager);
             $passager->addTrajetsReserves($this);
         }
-
         return $this;
     }
 
@@ -161,7 +138,6 @@ class Trajet
         if ($this->passagers->removeElement($passager)) {
             $passager->removeTrajetsReserves($this);
         }
-
         return $this;
     }
 }
