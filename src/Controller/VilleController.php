@@ -39,7 +39,7 @@ final class VilleController extends AbstractController
      *     )
      * )
      */
-    #[Route(path: '/listeViles', name: 'app_ville_listeVilles', methods: ['GET'])]
+    #[Route(path: '/listeVilles', name: 'app_ville_listeVilles', methods: ['GET'])]
     public function index(VilleRepository $villeRepository): JsonResponse
     {
         $villes = $villeRepository->findAll();
@@ -73,7 +73,7 @@ final class VilleController extends AbstractController
      *     )
      * )
      */
-    #[Route(path: '/listeCP', name: 'app_ville_listeVilles', methods: ['GET'])]
+    #[Route(path: '/listeCP', name: 'app_ville_listeCP', methods: ['GET'])]
     public function listeCps(VilleRepository $villeRepository): JsonResponse
     {
         $cps = $villeRepository->findAll();
@@ -141,7 +141,7 @@ final class VilleController extends AbstractController
      *     )
      * )
      */
-    #[Route('/{id}', name: 'app_trajet_rechercheTrajet', methods: ['DELETE'])]
+    #[Route('/{id}', name: 'app_ville_delete', methods: ['DELETE'])]
     public function supprimeVille(EntityManagerInterface $entityManager, Ville $ville): JsonResponse
     {
         $entityManager->remove($ville);

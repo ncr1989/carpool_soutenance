@@ -292,4 +292,26 @@ final class TrajetController extends AbstractController
         $entityManager->flush();
         return new JsonResponse(['Succés' => 'Trajet supprime.'], JsonResponse::HTTP_OK);
     }
+
+
+    #[Route('/{id}', name: 'app_reservation_detailsTrajet', methods: ['GET'])]
+    public function detailsTrajet(Trajet $trajet, EntityManagerInterface $entityManager): JsonResponse
+    {
+        if (!$trajet) {
+            return new JsonResponse(['error' => 'Trajet not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+        $trajetRecherche = [
+            'id' => $trajet->getId(),
+            'nbrPlaces' => $trajet->getNbrPlaces(),
+            'villeArrivee' => $trajet->getVilleArrivee()->getLabel(),
+            'villeDepart' => $trajet->getVilleDepart()->getLabel(),
+            'dateTrajet' => $trajet->getDateTrajet(),
+            'conducteur' => [
+                'nom' => $trajet->getPersonne()->getNom(),
+                'prenom' => $trajet->getPersonne()->getPrenom()
+            ]
+        ];
+
+        return new JsonResponse($trajetRecherche, JsonResponse::HTTP_OK);
+    }
 }
