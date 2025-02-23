@@ -16,16 +16,13 @@ class Trajet
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Ville::class)]
+    #[ORM\ManyToOne(targetEntity: Ville::class,inversedBy:"trajetsArrivee")]
     #[ORM\JoinColumn(nullable: false)]
     private ?Ville $villeArrivee = null;
 
-    #[ORM\ManyToOne(targetEntity: Ville::class)]
+    #[ORM\ManyToOne(targetEntity: Ville::class,inversedBy:"trajetsDepart" )]
     #[ORM\JoinColumn(nullable: false)]
     private ?Ville $villeDepart = null;
-
-    #[ORM\Column]
-    private ?bool $conducteur = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateTrajet = null;
@@ -72,16 +69,6 @@ class Trajet
         return $this;
     }
 
-    public function isConducteur(): ?bool
-    {
-        return $this->conducteur;
-    }
-
-    public function setConducteur(bool $conducteur): static
-    {
-        $this->conducteur = $conducteur;
-        return $this;
-    }
 
     public function getDateTrajet(): ?\DateTimeInterface
     {

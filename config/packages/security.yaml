@@ -12,6 +12,15 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        swagger_doc:
+            pattern: ^/api/doc
+            security: false
+            
+        swagger_json:
+            pattern: ^/api/doc.json
+            security: false
+
         login:
             pattern: ^/api/login
             security: false
@@ -37,6 +46,8 @@ security:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/inscription, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/doc$, roles: PUBLIC_ACCESS}
+        - { path: ^/api/doc.json$, roles: PUBLIC_ACCESS }
 
 when@test:
     security:

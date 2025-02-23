@@ -13,15 +13,38 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Annotations as OA;
 
 #[Route('api/trajet')]
 final class TrajetController extends AbstractController
 {
-    #[Route('/all', name: 'app_trajet_index', methods: ['GET'])]
+    /**
+     * @OA\Get(
+     *     path="/api/trajet/listeTrajets",
+     *     summary="Get list of all trips",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Returns a list of trips",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer"),
+     *                 @OA\Property(property="nbrPlaces", type="integer"),
+     *                 @OA\Property(property="villeArrivee", type="string"),
+     *                 @OA\Property(property="villeDepart", type="string"),
+     *                 @OA\Property(property="dateTrajet", type="string", format="date-time"),
+     *                 @OA\Property(property="conducteur", type="array", @OA\Items(type="string"))
+     *             )
+     *         )
+     *     )
+     * )
+     */
+    #[Route('/listeTrajets', name: 'app_trajet_index', methods: ['GET'])]
     public function listeTrajets(TrajetRepository $trajetRepository, EntityManagerInterface $entityManager): JsonResponse
     {
         $trajets = $trajetRepository->findAll();
-
         $trajetsArray = array_map(function ($trajet) {
             return [
                 'id' => $trajet->getId(),
@@ -30,30 +53,57 @@ final class TrajetController extends AbstractController
                 'villeDepart' => $trajet->getVilleDepart()->getLabel(),
                 'dateTrajet' => $trajet->getDateTrajet(),
                 'conducteur' => [$trajet->getPersonne()->getNom(), $trajet->getPersonne()->getPrenom()]
-
-
-
             ];
         }, $trajets);
-
         return new JsonResponse($trajetsArray, JsonResponse::HTTP_OK);
     }
 
-    //create trajet
+    /**
+     * @OA\Post(
+     *     path="/api/trajet/new",
+     *     summary="Create a new trip",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="villeDepart", type="string"),
+     *             @OA\Property(property="villeArrivee", type="string"),
+     *             @OA\Property(property="personneId", type="integer"),
+     *             @OA\Property(property="nbrPlaces", type="integer"),
+     *             @OA\Property(property="dateTrajet", type="string", format="date-time")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Trip created successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string")
+     *         )
+     *     )
+     * )
+     */
     #[Route('/new', name: 'app_trajet_new', methods: ['POST'])]
     public function nouveauTrajet(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $data = $data = json_decode($request->getContent(), true);
+        $data = json_decode($request->getContent(), true);
         $villeD = $data['villeDepart'];
         $villeA = $data['villeArrivee'];
         $personneId = $data['personneId'];
         $nbrPlaces = (int)$data['nbrPlaces'];
         $dateTrajet = $data['dateTrajet'];
-        $conducteur = filter_var($data['conducteur'], FILTER_VALIDATE_BOOLEAN);
 
-        //if(empty($villeD) || empty($villeA) || empty($personneId)|| empty($nbrPlaces) || empty($dateTrajet) || $conducteur == null){
-        //    return new JsonResponse(['error' => 'Remplir tous les champs!'], JsonResponse::HTTP_BAD_REQUEST); 
-        //}
+        if (empty($villeD) || empty($villeA) || empty($personneId) || empty($nbrPlaces) || empty($dateTrajet)) {
+            return new JsonResponse(['error' => 'Remplir tous les champs!'], JsonResponse::HTTP_BAD_REQUEST);
+        }
         $personne = $entityManager->getRepository(Personne::class)->find($personneId);
         $villeDepart = $entityManager->getRepository(Ville::class)->findOneBy(['label' => $villeD]);
         $villeArrivee = $entityManager->getRepository(Ville::class)->findOneBy(['label' => $villeA]);
@@ -64,7 +114,6 @@ final class TrajetController extends AbstractController
         $trajet->setVilleDepart($villeDepart);
         $trajet->setNbrPlaces($nbrPlaces);
         $trajet->setDateTrajet($dateTrajet);
-        $trajet->setConducteur($conducteur);
         $trajet->setPersonne($personne);
         $entityManager->persist($trajet);
         $entityManager->flush();
@@ -72,29 +121,60 @@ final class TrajetController extends AbstractController
         return new JsonResponse(['message' => 'Trajet inscrit avec succès!'], JsonResponse::HTTP_CREATED);
     }
 
-    #[Route('/{id}', name: 'app_trajet_detailsTrajet', methods: ['GET'])]
-    public function detailsTrajet(Trajet $trajet, EntityManagerInterface $entityManager): JsonResponse
-    {
-        if (!$trajet) {
-            return new JsonResponse(['error' => 'Trajet not found'], JsonResponse::HTTP_NOT_FOUND);
-        }
-        $trajetRecherche = [
-            'id' => $trajet->getId(),
-            'nbrPlaces' => $trajet->getNbrPlaces(),
-            'villeArrivee' => $trajet->getVilleArrivee()->getLabel(),
-            'villeDepart' => $trajet->getVilleDepart()->getLabel(),
-            'dateTrajet' => $trajet->getDateTrajet(),
-            'conducteur' => [
-                'nom' => $trajet->getPersonne()->getNom(),
-                'prenom' => $trajet->getPersonne()->getPrenom()
-            ]
-        ];
-
-        return new JsonResponse($trajetRecherche, JsonResponse::HTTP_OK);
-    }
-
-
-
+    /**
+     * @OA\Get(
+     *     path="/api/trajet/{villeD}/{villeA}/{dateTrajet}",
+     *     summary="Search for trips based on cities and date",
+     *     @OA\Parameter(
+     *         name="villeD",
+     *         in="path",
+     *         description="Departure city",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="villeA",
+     *         in="path",
+     *         description="Arrival city",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="dateTrajet",
+     *         in="path",
+     *         description="Date of the trip",
+     *         required=true,
+     *         @OA\Schema(type="string", format="date-time")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Returns a list of trips",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer"),
+     *                 @OA\Property(property="nbrPlaces", type="integer"),
+     *                 @OA\Property(property="villeArrivee", type="string"),
+     *                 @OA\Property(property="villeDepart", type="string"),
+     *                 @OA\Property(property="dateTrajet", type="string", format="date-time"),
+     *                 @OA\Property(property="conducteur", type="object",
+     *                     @OA\Property(property="nom", type="string"),
+     *                     @OA\Property(property="prenom", type="string")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="City not found",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string")
+     *         )
+     *     )
+     * )
+     */
     #[Route('/{villeD}/{villeA}/{dateTrajet}', name: 'app_trajet_rechercheTrajet', methods: ['GET'])]
     public function rechercheTrajet(EntityManagerInterface $entityManager, $dateTrajet, $villeA, $villeD): JsonResponse
     {
@@ -129,7 +209,7 @@ final class TrajetController extends AbstractController
                 'nbrPlaces' => $trajet->getNbrPlaces(),
                 'villeArrivee' => $trajet->getVilleArrivee()->getLabel(),
                 'villeDepart' => $trajet->getVilleDepart()->getLabel(),
-                'dateTrajet' => $trajet->getDateTrajet()->format('Y-m-d H:i:s'), // Formatting date
+                'dateTrajet' => $trajet->getDateTrajet()->format('Y-m-d H:i:s'),
                 'conducteur' => [
                     'nom' => $trajet->getPersonne()->getNom(),
                     'prenom' => $trajet->getPersonne()->getPrenom()
@@ -139,27 +219,38 @@ final class TrajetController extends AbstractController
         return new JsonResponse($trajetArray, JsonResponse::HTTP_OK);
     }
 
-
-    #[Route('/{id}/reserver', name: 'app_trajet_reserverTrajet', methods: ['POST'])]
-    public function reserverTrajet(Request $request, Trajet $trajet, EntityManagerInterface $entityManager): Response
-    {
-        $nbrPlaces = $trajet->getNbrPlaces();
-        if ($nbrPlaces > 0) {
-            $trajet->addPassager($trajet->getPersonne());
-            $trajet->setNbrPlaces(($trajet->getNbrPlaces() - 1));
-            $entityManager->persist($trajet);
-            $entityManager->flush();
-            return new JsonResponse(["Success" => "Reservation effectué!"], JsonResponse::HTTP_OK);
-        } else {
-            return new JsonResponse(["Rservation impossiible" => "Plus de place"], JsonResponse::HTTP_OK);
-        }
-    }
-
+    /**
+     * @OA\Get(
+     *     path="/api/trajet/listePassagers/{id}",
+     *     summary="Get list of passengers for a specific trip",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Trip ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Returns a list of passengers",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer"),
+     *                 @OA\Property(property="prenom", type="string"),
+     *                 @OA\Property(property="nom", type="string"),
+     *                 @OA\Property(property="email", type="string"),
+     *                 @OA\Property(property="telephone", type="string")
+     *             )
+     *         )
+     *     )
+     * )
+     */
     #[Route('/listePassagers/{id}', name: 'app_trajet_listePassagers', methods: ['GET'])]
     public function listePassagers(Request $request, Trajet $trajet, EntityManagerInterface $entityManager): Response
     {
         $passagers =  $trajet->getPassagers();
-
         $passagersArray = [];
         foreach ($passagers as $passager) {
             $passagersArray[] = [
@@ -173,25 +264,32 @@ final class TrajetController extends AbstractController
         return new JsonResponse($passagersArray, JsonResponse::HTTP_OK);
     }
 
-
-    #[Route('/annuleReservation/{id}', name: 'app_trajet_annuleReservation', methods: ['DELETE'])]
-    public function deleteReservation(Request $request, Trajet $trajet, EntityManagerInterface $entityManager): JsonResponse
-    {
-        if (!$trajet) {
-            return new JsonResponse(['error' => 'Trajet not found'], JsonResponse::HTTP_NOT_FOUND);
-        }
-        $trajet->getPersonne()->removeTrajetsReserves($trajet);
-        $entityManager->persist($trajet);
-        $entityManager->flush();
-        return new JsonResponse(['Succés' => 'Reservation annulé.'], JsonResponse::HTTP_OK);
-    }
-    #[Route('/supprimeTrajet/{id}', name: 'app_trajet_supprimeTrajet', methods: ['DELETE'])]
+    /**
+     * @OA\Delete(
+     *     path="/api/trajet/{id}",
+     *     summary="Delete a trip",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Trip ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Trip deleted successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="Succés", type="string")
+     *         )
+     *     )
+     * )
+     */
+    #[Route('/{id}', name: 'app_trajet_supprimeTrajet', methods: ['DELETE'])]
     public function deleteTrajetProposes(Request $request, Trajet $trajet, EntityManagerInterface $entityManager): JsonResponse
     {
-        //$trajet->getPersonne()->removeTrajetsPropose($trajet);
         $entityManager->remove($trajet);
         $entityManager->flush();
-
         return new JsonResponse(['Succés' => 'Trajet supprime.'], JsonResponse::HTTP_OK);
     }
 }

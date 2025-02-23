@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250220150330 extends AbstractMigration
+final class Version20250223145241 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,14 +20,12 @@ final class Version20250220150330 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP INDEX UNIQ_FCEC9EF7BA2F5EB ON personne');
-        $this->addSql('ALTER TABLE personne DROP api_token');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_43C3D9C315A3C1BC ON ville (insee_code)');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE personne ADD api_token VARCHAR(255) DEFAULT NULL');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_FCEC9EF7BA2F5EB ON personne (api_token)');
+        $this->addSql('DROP INDEX UNIQ_43C3D9C315A3C1BC ON ville');
     }
 }

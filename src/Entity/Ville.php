@@ -27,10 +27,10 @@ class Ville
     #[ORM\Column(length: 255)]
     private ?string $label = null;
 
-    #[ORM\Column(type: "decimal", precision: 10, scale: 6, nullable: true)]
+    #[ORM\Column(type: "float",  nullable: true)]
     private ?float $latitude = null;
 
-    #[ORM\Column(type: "decimal", precision: 10, scale: 6, nullable: true)]
+    #[ORM\Column(type: "float", nullable: true)]
     private ?float $longitude = null;
 
     #[ORM\Column(length: 100)]
