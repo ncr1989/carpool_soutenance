@@ -15,6 +15,8 @@ sonarqube-check:
     paths:
       - .sonar/cache
   before_script:
+    # Ensure the .sonar directory exists before modifying permissions
+    - mkdir -p ${CI_PROJECT_DIR}/.sonar
     - chmod -R 777 ${CI_PROJECT_DIR}/.sonar
   script: 
     - export SONAR_SCANNER_OPTS="-Xmx1024m"
