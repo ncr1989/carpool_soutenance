@@ -14,8 +14,11 @@ sonarqube-check:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
+  before_script:
+    - chmod -R 777 ${CI_PROJECT_DIR}/.sonar
   script: 
-    - sonar-scanner
+    - export SONAR_SCANNER_OPTS="-Xmx1024m"
+    - sonar-scanner -X
   allow_failure: true
   only:
     - merge_requests
