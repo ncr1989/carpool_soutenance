@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Trajet;
+use App\Service\Mailer;
 use App\Entity\Personne;
 use App\Entity\Ville;
 use App\Form\TrajetType;
@@ -286,11 +287,15 @@ final class TrajetController extends AbstractController
      * )
      */
     #[Route('/{id}', name: 'app_trajet_supprimeTrajet', methods: ['DELETE'])]
-    public function deleteTrajetProposes(Request $request, Trajet $trajet, EntityManagerInterface $entityManager): JsonResponse
+    public function deleteTrajetProposes(Request $request, Trajet $trajet, EntityManagerInterface $entityManager,Mailer $mailer): JsonResponse
     {
+
+        
         $entityManager->remove($trajet);
+        //$mailer->sendEmail( $trajet);
         $entityManager->flush();
         return new JsonResponse(['Succés' => 'Trajet supprime.'], JsonResponse::HTTP_OK);
+       
     }
 
 

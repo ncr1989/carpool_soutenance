@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Personne;
+use App\Repository\PersonneRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -156,7 +157,7 @@ final class PersonneController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         if (!$data) {
-            return new JsonResponse(['error' => 'Invalid JSON'], JsonResponse::HTTP_BAD_REQUEST);
+            return new JsonResponse(['error' => ' JSON'], JsonResponse::HTTP_BAD_REQUEST);
         }
         if (!empty($data['nom'])) {
             $personne->setNom($data['nom']);
