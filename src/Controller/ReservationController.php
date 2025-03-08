@@ -179,7 +179,7 @@ final class ReservationController extends AbstractController
             $entityManager->flush();
             return new JsonResponse(["message" => "Reservation effectué!"], JsonResponse::HTTP_OK);
         } else {
-            return new JsonResponse(["status" => "error", "message" => "Plus de place"], JsonResponse::HTTP_OK);
+            return new JsonResponse(["status" => "error", "message" => "Plus de place"], JsonResponse::HTTP_BAD_REQUEST);
         }
     }
 

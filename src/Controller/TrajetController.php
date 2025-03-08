@@ -245,7 +245,7 @@ final class TrajetController extends AbstractController
      *                 @OA\Property(property="telephone", type="string")
      *             )
      *         )
-     *     )
+     *     )pubcl
      * )
      */
     #[Route('/listePassagers/{id}', name: 'app_trajet_listePassagers', methods: ['GET'])]

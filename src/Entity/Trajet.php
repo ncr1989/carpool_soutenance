@@ -46,6 +46,10 @@ class Trajet
     {
         return $this->id;
     }
+    public function setId(int $id): ?int
+    {
+        return $this->id;
+    }
 
     public function getVilleArrivee(): ?Ville
     {

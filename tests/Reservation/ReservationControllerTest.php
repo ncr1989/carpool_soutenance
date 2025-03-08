@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Tests\Security\Functional;
+namespace App\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Personne;
 use App\Tests\BaseTestCase;
 use Doctrine\DBAL\Types\Types;
+use App\Entity\Trajet;
 
 
 class ReservationControllerTest extends BaseTestCase {
@@ -42,5 +43,57 @@ class ReservationControllerTest extends BaseTestCase {
         $this->assertEquals("testMe",$data[0]["conducteur"]["nom"]);
         $this->assertEquals("Lemon",$data[0]["conducteur"]["prenom"]);
     }
+    public function testReserverTrajet():void{
+       
+        $response =  $this->client->request('POST', '/api/reservation/1/2', [
+            'headers' => [
+                'x-auth-token' => $this->token,
+            ]
+        ]);
+        
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertJsonContains(['message'=>"Reservation effectué!"]);
+
+    }
+
+    public function testPlusDePlace():void{
+        $trajet = $this->entityManager->getRepository(Trajet::class)->findOneBy(["id"=>2]);
+        $nbrPlaces = $trajet->getNbrPlaces();
+        for($i=0;$i<$nbrPlaces;$i++){
+            $response =  $this->client->request('POST', '/api/reservation/1/2', [
+                'headers' => [
+                    'x-auth-token' => $this->token,
+                ]
+            ]);
+        }
+
+        $response = $this->client->request('POST', '/api/reservation/1/2', [
+            'headers' => [
+                'x-auth-token' => $this->token,
+            ]
+        ]);
+    
+        
+        $this->assertResponseStatusCodeSame(400); // Assuming 400 is returned for "Plus de place"
+        $this->assertJsonContains(['message' => "Plus de place"]);
+       
+    }
+
+    public function testAnnuleReservation():void{
+        $trajet = $this->entityManager->getRepository(Trajet::class)->findOneBy(["id"=>2]);
+        $nbrPlaces = $trajet->getNbrPlaces();
+       $response =  $this->client->request('DELETE', 'api/reservation/annuleReservation/1/2', [
+            'headers' => [
+                'x-auth-token' => $this->token,
+            ]
+        ]);
+        $trajet = $this->entityManager->getRepository(Trajet::class)->findOneBy(["id"=>2]);
+        $afterPlaces = $trajet->getNbrPlaces();
+                $this->assertResponseStatusCodeSame(200);
+        $this->assertJsonContains(['message'=>'Reservation annulé.']);
+        $this->assertNotEquals($nbrPlaces,$afterPlaces);
+           
+}
+
 
 }
