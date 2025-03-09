@@ -22,8 +22,8 @@ class ReservationControllerTest extends BaseTestCase {
         
         $date = new \DateTime("2025-02-23 15:30"); 
         $expectedDate = new \DateTime("2025-02-23");
-        $this->assertEquals("brenillis",$data['villeArrivee']);
-        $this->assertEquals("brenillis",$data['villeDepart']);
+        $this->assertEquals("brennilis",$data['villeArrivee']);
+        $this->assertEquals("brennilis",$data['villeDepart']);
         $this->assertEquals(3,$data['nbrPlaces']);
         $this->assertEquals($expectedDate->format('Y-m-d'), (new \DateTime($data['dateTrajet']['date']))->format('Y-m-d'));
         $this->assertResponseStatusCodeSame(200);

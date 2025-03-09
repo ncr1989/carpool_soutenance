@@ -109,11 +109,19 @@ final class VilleController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+        $ville = new Ville();
         $nom = $data['ville'];
         $cp = $data['cp'];
-        $ville = new Ville();
+        $insee_code = $data['insee_code'];
+        $zip_code = $data['zip_code'];
+        $label = $data['label'];
+
         $ville->setCityCode($cp);
         $ville->setLabel($nom);
+        $ville->setInseeCode($insee_code);
+        $ville->setZipCode($zip_code);
+        
+
         $entityManager->persist($ville);
         $entityManager->flush();
 

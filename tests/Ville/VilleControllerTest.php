@@ -11,6 +11,7 @@ class VilleControllerTest extends BaseTestCase
 {
     public function testListeVilles(): void
     {
+        
         $response =  $this->client->request('GET', '/api/ville/listeVilles', [
             'headers' => [
                 'x-auth-token' => $this->token,
@@ -44,10 +45,25 @@ class VilleControllerTest extends BaseTestCase
 
     public function testNewVille(): void
     {
+        $newVille = [
+            "ville" =>"Paris",
+            "cp" =>"7200",
+            "insee_code"=>"42300",
+            "zip_code"=>"42300",
+            "label"=>"Paris",
+            
+            
+            
+        ];
         $response =  $this->client->request('POST', '/api/ville/new', [
+            'json' => $newVille,
             'headers' => [
                 'x-auth-token' => $this->token,
             ]
         ]);
+        
+        $this->assertResponseStatusCodeSame(201);
+        $this->assertJsonContains(['message'=>'Ville crée avec succès!']);
+
     }
 }
