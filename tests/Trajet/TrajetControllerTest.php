@@ -13,7 +13,7 @@ use App\Entity\Trajet;
 use function PHPUnit\Framework\assertEmpty;
 
 
-class TrajetPersonneControllerTest extends BaseTestCase{
+class TrajetControllerTest extends BaseTestCase{
 
     public function testListeTrajets():void {
         $response =  $this->client->request('GET', '/api/trajet/listeTrajets', [
@@ -36,7 +36,7 @@ class TrajetPersonneControllerTest extends BaseTestCase{
       public function testNewTrajet():void{
         $newTrajet = [
             "villeDepart" =>"baye",
-            "villeArrivee" =>"coray",
+            "villeArrivee" =>"brennilis",
             "personneId" =>1,
             "nbrPlaces"=>4,
             "dateTrajet"=>"2025-02-23T15:30:00"

@@ -20,10 +20,10 @@ class ReservationControllerTest extends BaseTestCase {
         ]);
         $data = $response->toArray();
         
-        $date = new \DateTime("2025-02-19 15:30"); // Correct DateTime instantiation
-        $expectedDate = new \DateTime("2025-02-19");
-        $this->assertEquals("baye",$data['villeArrivee']);
-        $this->assertEquals("bodilis",$data['villeDepart']);
+        $date = new \DateTime("2025-02-23 15:30"); 
+        $expectedDate = new \DateTime("2025-02-23");
+        $this->assertEquals("brenillis",$data['villeArrivee']);
+        $this->assertEquals("brenillis",$data['villeDepart']);
         $this->assertEquals(3,$data['nbrPlaces']);
         $this->assertEquals($expectedDate->format('Y-m-d'), (new \DateTime($data['dateTrajet']['date']))->format('Y-m-d'));
         $this->assertResponseStatusCodeSame(200);

@@ -3,6 +3,7 @@
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Personne;
+use App\Entity\Ville;
 use App\Tests\BaseTestCase;
 use Doctrine\DBAL\Types\Types;
 
@@ -15,6 +16,7 @@ class VilleControllerTest extends BaseTestCase
                 'x-auth-token' => $this->token,
             ]
         ]);
+        $allCities = $this->entityManager->getRepository(Ville::class)->findAll();
         $data = $response->toArray();
         $this->assertResponseStatusCodeSame(200);
         $this->assertArrayHasKey('nom', $data[0]);
@@ -22,7 +24,7 @@ class VilleControllerTest extends BaseTestCase
         $this->assertArrayHasKey('department', $data[0]);
         $this->assertArrayHasKey('department_number', $data[0]);
         $this->assertArrayHasKey('region', $data[0]);
-        $this->assertEquals(count($data), 324);
+        $this->assertEquals(count($data), count($allCities));
     }
 
     public function testListeCps(): void
@@ -32,11 +34,12 @@ class VilleControllerTest extends BaseTestCase
                 'x-auth-token' => $this->token,
             ]
         ]);
+        $allCities = $this->entityManager->getRepository(Ville::class)->findAll();
         $data = $response->toArray();
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertArrayHasKey('zip_code', $data[0]);
-        $this->assertEquals(count($data), 324);
+        $this->assertEquals(count($data),count($allCities));
     }
 
     public function testNewVille(): void
