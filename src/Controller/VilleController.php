@@ -126,6 +126,13 @@ final class VilleController extends AbstractController
         $ville->setLabel($nom);
         $ville->setInseeCode($insee_code);
         $ville->setZipCode($zip_code);
+        $ville->setDepartmentName($department_name);
+        $ville->setDepartmentNumber($department_number);
+        $ville->setRegionName($region_name);
+        $ville->setRegionGeojsonName($region_geojson_name);
+        
+        
+        
         
 
         $entityManager->persist($ville);
