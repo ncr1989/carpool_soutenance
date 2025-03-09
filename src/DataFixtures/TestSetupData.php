@@ -43,6 +43,7 @@ class TestSetupData extends Fixture implements FixtureGroupInterface
         $baye->setId(68);
         $baye->setInseeCode(29005);
         $baye->setzipCode(29300);
+        $baye->setCityCode("baye");
         $baye->setlabel("baye");
         $baye->setLatitude(47.85584953);
         $baye->setLongitude(-3.613231761);
@@ -56,6 +57,7 @@ class TestSetupData extends Fixture implements FixtureGroupInterface
         $bodilis->setId(69);
         $bodilis->setInseeCode(29010);
         $bodilis->setzipCode(29400);
+        $bodilis->setCityCode("bodilis");
         $bodilis->setlabel("bodilis");
         $bodilis->setLatitude(48.515319658);
         $bodilis->setLongitude(-4.120072961);
@@ -69,6 +71,7 @@ class TestSetupData extends Fixture implements FixtureGroupInterface
         $brennilis->setId(70);
         $brennilis->setInseeCode(29010);
         $brennilis->setzipCode(29690);
+        $brennilis->setCityCode("brennilis");
         $brennilis->setlabel("brennilis");
         $brennilis->setLatitude(48.359908338);
         $brennilis->setLongitude(-3.85090142);
