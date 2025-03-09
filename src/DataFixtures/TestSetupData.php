@@ -69,7 +69,7 @@ class TestSetupData extends Fixture implements FixtureGroupInterface
 
         //brennillis 
         $brennilis->setId(70);
-        $brennilis->setInseeCode(29010);
+        $brennilis->setInseeCode(29018);
         $brennilis->setzipCode(29690);
         $brennilis->setCityCode("brennilis");
         $brennilis->setlabel("brennilis");
