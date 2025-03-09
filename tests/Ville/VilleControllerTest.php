@@ -51,6 +51,14 @@ class VilleControllerTest extends BaseTestCase
             "insee_code"=>"42300",
             "zip_code"=>"42300",
             "label"=>"Paris",
+            "department_name"=>"test",
+            "department_number"=>1256,
+            "region_name"=>"test2",
+            "region_geojson_name"=>"test8",
+            
+            
+            
+
             
             
             

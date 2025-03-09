@@ -115,6 +115,12 @@ final class VilleController extends AbstractController
         $insee_code = $data['insee_code'];
         $zip_code = $data['zip_code'];
         $label = $data['label'];
+        $department_name = $data['department_name'];
+        $department_number = $data['department_number'];
+        $region_name = $data['region_name'];
+        $region_geojson_name = $data['region_geojson_name'];
+        
+        
 
         $ville->setCityCode($cp);
         $ville->setLabel($nom);
