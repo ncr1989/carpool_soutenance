@@ -112,7 +112,7 @@ class TestSetupData extends Fixture implements FixtureGroupInterface
         $dateString2 = "2025-02-23 15:30";
         $dateTime2 = new \DateTime($dateString2);
         $trajet2->setId(3);
-        $trajet2->setVilleArrivee($b);
+        $trajet2->setVilleArrivee($brennilis);
         $trajet2->setVilleDepart($brennilis);
         $trajet2->setPersonne($objPersonne);
         $trajet2->setDateTrajet($dateTime2);
