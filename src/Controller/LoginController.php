@@ -73,7 +73,7 @@ final class LoginController extends AbstractController
      *     )
      * )
      */
-    #[Route('/api/login', name: 'app_login', methods: ['POST'])]
+    #[Route('/api/login', name: 'app_login', methods: ['POST','GET'])]
     public function login(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);

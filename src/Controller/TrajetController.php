@@ -52,7 +52,8 @@ final class TrajetController extends AbstractController
                 'nbrPlaces' => $trajet->getNbrPlaces(),
                 'villeArrivee' => $trajet->getVilleArrivee()->getLabel(),
                 'villeDepart' => $trajet->getVilleDepart()->getLabel(),
-                'dateTrajet' => $trajet->getDateTrajet(),
+                'dateTrajet' => $trajet->getDateTrajet()->format('Y-m-d'),
+                'heureTrajet'=> $trajet->getDateTrajet()->format('H:i'),
                 'conducteur' => [$trajet->getPersonne()->getNom(), $trajet->getPersonne()->getPrenom()]
             ];
         }, $trajets);

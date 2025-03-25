@@ -85,14 +85,6 @@ class TestSetupData extends Fixture implements FixtureGroupInterface
         $manager->persist($baye);
         $manager->persist($bodilis);
         $manager->persist($brennilis);
-
-
-        
-        
-        
-
-        
-       
         $dateString = "2025-02-19 15:30";
         $dateTime = new \DateTime($dateString);
 

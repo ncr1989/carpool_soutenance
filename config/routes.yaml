@@ -4,6 +4,11 @@ controllers:
         namespace: App\Controller
     type: attribute
 
+api_login_options:
+  path: /api/login
+  methods: [OPTIONS]
+  controller: Symfony\Bundle\FrameworkBundle\Controller\AbstractController::emptyAction
+
 app.swagger_ui:
     path: /api/doc
     methods: GET

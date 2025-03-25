@@ -45,12 +45,12 @@ final class VilleController extends AbstractController
         $villes = $villeRepository->findAll();
         $villesArray = array_map(function ($ville) {
             return [
-                'id' => $ville->getId(),
+                //'id' => $ville->getId(),
                 'nom' => $ville->getLabel(),
-                'city_code' => $ville->getCityCode(),
-                'department' => $ville->getDepartmentName(),
-                'department_number' => $ville->getDepartmentNumber(),
-                'region' => $ville->getRegionName(),
+                //'city_code' => $ville->getCityCode(),
+                //'department' => $ville->getDepartmentName(),
+                //'department_number' => $ville->getDepartmentNumber(),
+                //'region' => $ville->getRegionName(),
             ];
         }, $villes);
         return new JsonResponse($villesArray, JsonResponse::HTTP_OK);

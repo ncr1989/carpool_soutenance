@@ -122,7 +122,8 @@ final class ReservationController extends AbstractController
                 'villeDepart' => $trajet->getVilleDepart()->getLabel(),
                 'villeArrivee' => $trajet->getVilleArrivee()->getLabel(),
                 'nombrePlaces' => $trajet->getNbrPlaces(),
-                'date' => $trajet->getDateTrajet()->format('Y-m-d H:i')
+                'dateTrajet' => $trajet->getDateTrajet()->format('Y-m-d'),
+                'heureTrajet'=> $trajet->getDateTrajet()->format('H:i'),
             ];
         }
         return new JsonResponse($mesTrajetsReserves, JsonResponse::HTTP_OK);
