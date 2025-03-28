@@ -26,7 +26,6 @@
             <v-expand-transition>
               <div v-show="show[trajet.id]">
                 <v-card-text>
-                  <!-- Show reservation success/error message specific to this trajet -->
                   <v-alert
                     v-if="reservationStatus[trajet.id]"
                     :type="reservationStatus[trajet.id] === 'Success' ? 'success' : 'error'"
@@ -65,20 +64,20 @@
                       readonly
                     ></v-text-field>
                   </v-form>
-                
+
 
                   <v-container>
                     <v-row>
                       <v-col cols="3">
-                        <v-btn color="primary" class="mt-4" @click="reserver(trajet.id)">
+                        <v-btn color="primary" class="mt-4 text-body-2 " @click="reserver(trajet.id)">
                     Réserver
                   </v-btn>
                       </v-col>
-                      <v-col cols="5">
-                        <v-btn color="primary" class="mt-4" block>Envoyer un Mail</v-btn>
+                      <v-col cols="6">
+                        <v-btn color="primary" class="mt-4 text-body-2" block>Envoyer un Mail</v-btn>
                       </v-col>
-                      <v-col cols="4">
-                        <v-btn color="primary" class="mt-4" block>Annuler</v-btn>
+                      <v-col cols="3">
+                        <v-btn color="primary" class="mt-4 text-body-2" block>Annuler</v-btn>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -99,8 +98,8 @@
     setup() {
       const trajets = ref([]);
       const show = ref({});
-      const reservationStatus = ref({}); // Track status for each trajet
-      const reservationMessages = ref({}); // Store messages per trajet
+      const reservationStatus = ref({}); 
+      const reservationMessages = ref({}); 
       const userId = localStorage.getItem("userId");
   
       const fetchTrajets = async () => {
@@ -109,7 +108,7 @@
           trajets.value = response.data;
           trajets.value.forEach((trajet) => {
             show.value[trajet.id] = false;
-            reservationStatus.value[trajet.id] = ""; // Initialize status
+            reservationStatus.value[trajet.id] = ""; 
             reservationMessages.value[trajet.id] = "";
           });
         } catch (error) {

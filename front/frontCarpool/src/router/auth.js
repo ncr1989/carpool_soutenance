@@ -9,6 +9,13 @@ export default [
       path: "/accueil",
       name: "Accueil",
       component: () => import("../views/Accueil.vue"),
+      props: (route) => ({ tab: route.query.tab })
+    },
+
+    {
+      path: "/inscription",
+      name: "Inscription",
+      component: () => import("../views/Inscription.vue"),
     },
     
   ];

@@ -11,6 +11,7 @@ security:
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
+            stateless: true
             security: false
 
         swagger_doc:
@@ -23,6 +24,7 @@ security:
 
         login:
             pattern: ^/api/login
+            stateless: true
             security: false
 
         # Protect all API routes
@@ -43,11 +45,11 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api/inscription, roles: PUBLIC_ACCESS }
-        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/doc$, roles: PUBLIC_ACCESS}
-        - { path: ^/api/doc.json$, roles: PUBLIC_ACCESS }
+    - { path: ^/api/login, roles: PUBLIC_ACCESS, methods: [GET, POST, OPTIONS] }
+    - { path: ^/api/inscription, roles: PUBLIC_ACCESS, methods: [GET, POST, OPTIONS] }
+    - { path: ^/api, roles: IS_AUTHENTICATED_FULLY, methods: [GET, POST, PUT, DELETE, OPTIONS] }
+    - { path: ^/api/doc$, roles: PUBLIC_ACCESS, methods: [GET, OPTIONS] }
+    - { path: ^/api/doc.json$, roles: PUBLIC_ACCESS, methods: [GET, OPTIONS] }
 
 when@test:
     security:

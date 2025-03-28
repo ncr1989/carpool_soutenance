@@ -211,7 +211,8 @@ final class TrajetController extends AbstractController
                 'nbrPlaces' => $trajet->getNbrPlaces(),
                 'villeArrivee' => $trajet->getVilleArrivee()->getLabel(),
                 'villeDepart' => $trajet->getVilleDepart()->getLabel(),
-                'dateTrajet' => $trajet->getDateTrajet()->format('Y-m-d H:i:s'),
+                'dateTrajet' => $trajet->getDateTrajet()->format('Y-m-d '),
+                'heureTrajet' => $trajet->getDateTrajet()->format('H:i'),
                 'conducteur' => [
                     'nom' => $trajet->getPersonne()->getNom(),
                     'prenom' => $trajet->getPersonne()->getPrenom()
@@ -264,6 +265,27 @@ final class TrajetController extends AbstractController
             ];
         }
         return new JsonResponse($passagersArray, JsonResponse::HTTP_OK);
+    }
+
+
+    #[Route('/listeTrajetsProposes/{id}', name: 'app_trajet_listeTrajetsProposes', methods: ['GET'])]
+    public function listeTrajetsProposes(Personne $personne): JsonResponse
+    {
+        
+        $trajetsProposes =  $personne->getTrajetsProposes();
+
+        $mesTrajetsProposes = [];
+        foreach ($trajetsProposes as $trajet) {
+            $mesTrajetsProposes[] = [
+                'conducteur' => [ "nom" => $trajet->getPersonne()->getNom(),"prenom" => $trajet->getPersonne()->getPrenom()],
+                'villeDepart' => $trajet->getVilleDepart()->getLabel(),
+                'villeArrivee' => $trajet->getVilleArrivee()->getLabel(),
+                'nombrePlaces' => $trajet->getNbrPlaces(),
+                'dateTrajet' => $trajet->getDateTrajet()->format('Y-m-d'),
+                'heureTrajet'=> $trajet->getDateTrajet()->format('H:i'),
+            ];
+        }
+        return new JsonResponse($mesTrajetsProposes, JsonResponse::HTTP_OK);
     }
 
     /**

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar extended color="primary" density="compact">
-      <!-- Mobile Menu Button -->
+    
       <v-app-bar-nav-icon @click="drawer = !drawer" class="d-sm-none"></v-app-bar-nav-icon>
       
       <v-app-bar-title>
@@ -9,35 +9,38 @@
         <span class="d-inline d-sm-none">SA</span>
       </v-app-bar-title>
 
-      <!-- Desktop Tabs -->
-      <template v-slot:extension>
-        <v-tabs 
-          v-model="tab" 
-          centered 
-          class="d-none d-sm-flex"
-          :grow="$vuetify.display.smAndDown"
-        >
-          <v-tab value="list">
-            <span class="d-none d-md-inline">Liste des Trajets</span>
-            <v-icon icon="mdi-format-list-bulleted" class="d-md-none"></v-icon>
-          </v-tab>
-          <v-tab value="search">
-            <span class="d-none d-md-inline">Rechercher</span>
-            <v-icon icon="mdi-magnify" class="d-md-none"></v-icon>
-          </v-tab>
-          <v-tab value="my-trips">
-            <span class="d-none d-md-inline">Vos Trajets</span>
-            <v-icon icon="mdi-account-group" class="d-md-none"></v-icon>
-          </v-tab>
-          <v-tab value="publish">
-            <span class="d-none d-md-inline">Publier</span>
-            <v-icon icon="mdi-plus-circle" class="d-md-none"></v-icon>
-          </v-tab>
-          <v-tab value="account">
-            <v-icon icon="mdi-account"></v-icon>
-          </v-tab>
-        </v-tabs>
-      </template>
+      
+      <v-tabs 
+        v-model="tab" 
+        centered 
+        class="d-none d-sm-flex"
+        :grow="$vuetify.display.smAndDown"
+      >
+        <v-tab value="list">
+          <span class="d-none d-md-inline">Liste des Trajets</span>
+          <v-icon icon="mdi-format-list-bulleted" class="d-md-none"></v-icon>
+        </v-tab>
+        <v-tab value="search">
+          <span class="d-none d-md-inline">Rechercher</span>
+          <v-icon icon="mdi-magnify" class="d-md-none"></v-icon>
+        </v-tab>
+        <v-tab value="my-trips">
+          <span class="d-none d-md-inline">Vos Trajets</span>
+          <v-icon icon="mdi-account-group" class="d-md-none"></v-icon>
+        </v-tab>
+        <v-tab value="publish">
+          <span class="d-none d-md-inline">Publier</span>
+          <v-icon icon="mdi-plus-circle" class="d-md-none"></v-icon>
+        </v-tab>
+        <v-tab value="account">
+          <v-icon icon="mdi-account"></v-icon>
+        </v-tab>
+
+       
+        <template #extension>
+         
+        </template>
+      </v-tabs>
     </v-app-bar>
 
     <!-- Mobile Navigation Drawer -->
@@ -72,7 +75,7 @@
           <publier-trajet />
         </v-window-item>
         <v-window-item value="account">
-          <!-- Account content -->
+          <profile />
         </v-window-item>
       </v-window>
     </v-main>
@@ -109,16 +112,6 @@
         <span class="text-caption">Compte</span>
       </v-btn>
     </v-bottom-navigation>
-
-    <v-footer app class="bg-primary">
-      <v-container>
-        <v-row justify="center">
-          <v-col cols="12" class="text-center text-white">
-            &copy; {{ new Date().getFullYear() }} SlanAbhaile
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-footer>
   </v-app>
 </template>
 
@@ -127,11 +120,13 @@ import ListeDesTrajets from "../components/listeTrajets.vue";
 import MesTrajets from "../components/vosTrajets.vue";
 import RechercheTrajet from "../components/rechercheTrajet.vue";
 import PublierTrajet from "../components/publierTrajet.vue";
+import Profile from "../components/profile.vue";
 
 export default {
   data() {
     return {
-      tab: "list",
+      
+      tab: this.$route.query.tab || "list",
       drawer: false,
       navItems: [
         { value: "list", title: "Liste des Trajets", icon: "mdi-format-list-bulleted" },
@@ -142,11 +137,15 @@ export default {
       ]
     };
   },
+
+  
+  
   components: {
     ListeDesTrajets,
     MesTrajets,
     RechercheTrajet,
-    PublierTrajet
+    PublierTrajet,
+    Profile
   }
 };
 </script>

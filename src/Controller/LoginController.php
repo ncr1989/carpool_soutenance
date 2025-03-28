@@ -26,6 +26,16 @@ final class LoginController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
+
+
+
+    private function addCorsHeaders(JsonResponse $response): JsonResponse
+{
+    $response->headers->set('Access-Control-Allow-Origin', 'http://localhost:5173');
+    $response->headers->set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+    $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    return $response;
+}
     /**
      * @OA\Post(
      *     path="/api/login",
@@ -94,9 +104,13 @@ final class LoginController extends AbstractController
         }
 
         $token = $this->jwtManager->create($user);
+
+
         return new JsonResponse([
             'token' => $token,
             'id' => $user->getId(),
         ]);
+       
+        
     }
 }

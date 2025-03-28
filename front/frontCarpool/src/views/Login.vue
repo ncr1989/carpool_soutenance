@@ -29,7 +29,7 @@
                         >
                       </v-col>
                       <v-col cols="5">
-                        <v-btn color="primary" class="mt-4" block>Inscription</v-btn>
+                        <v-btn color="primary" class="mt-4" block @click="inscription">Inscription</v-btn>
                       </v-col>
                       <v-col cols="4">
                         <v-btn color="primary" class="mt-4" block @click="reset">Effacer</v-btn>
@@ -49,6 +49,7 @@
 <script>
 import { ref } from 'vue'
 import api from "../service/api";
+import Inscription from './Inscription.vue';
 const form = ref()
 function reset() {
     form.value.reset()
@@ -66,6 +67,10 @@ export default {
       this.email = "";
       this.password = "";
       this.$refs.form.resetValidation();
+    },
+
+    inscription(){
+      this.$router.push("/inscription");
     },
 
     async login() {

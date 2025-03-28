@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Personne;
+use App\Entity\Marque;
 use App\Repository\PersonneRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Proxies\__CG__\App\Entity\Voiture;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -86,8 +88,18 @@ final class PersonneController extends AbstractController
         $prenom = $data['prenom'];
         $mdp = $data['mdp'];
         $confirmMdp = $data['confirmMdp'];
+        //car
+        $immatriculation = $data['immatriculation'];
+        $marque = $data['marque'];
+        $modele = $data['modele'];
+         $car = new Voiture;
+         $car->setModele($modele);
+         $car->setImmatriculation($immatriculation);
+         $marqueId = $entityManager->getRepository(Marque::class)->findOneBy(['nom'=>$marque]);
+        $car->setMarque($marqueId);
 
-        if (empty($email) || empty($mdp) || empty($confirmMdp)|| empty($pseudo)|| empty($nom) || empty($prenom)) {
+
+        if (empty($email) || empty($mdp) || empty($confirmMdp)|| empty($nom) || empty($prenom)) {
             return new JsonResponse(['error' => 'Remplir tous les champs!'], JsonResponse::HTTP_BAD_REQUEST);
         }
         if (!hash_equals($mdp, $confirmMdp)) {
@@ -106,6 +118,7 @@ final class PersonneController extends AbstractController
         $personne->setPseudo($pseudo);
         $personne->setNom($nom);
         $personne->setPrenom($prenom);
+        $personne->setVoiture($car);
 
         $entityManager->persist($personne);
         $entityManager->flush();
@@ -206,5 +219,10 @@ final class PersonneController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse(['Succés' => 'Compte supprime.'], JsonResponse::HTTP_OK);
+    }
+
+    #[Route('/getCompte/{id}', name: 'app_personne_getCompte', methods: ['GET'])]
+    public function getProfile(Personne $personne): JsonResponse
+    {return new JsonResponse($personne, JsonResponse::HTTP_OK);
     }
 }

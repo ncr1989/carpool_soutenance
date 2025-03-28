@@ -6,5 +6,11 @@ export default [
     {
         path: "/listeReservations/:id",
         name: "Mes Reservations",
-      },  
+      },
+      {
+        path: "/",
+        name: "Mes Reservations",
+      },
+         
+         
   ];

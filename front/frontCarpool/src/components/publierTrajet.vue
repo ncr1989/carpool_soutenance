@@ -1,63 +1,155 @@
 <template>
-    <v-sheet class="mx-auto" width="300">
-      <v-form @submit.prevent>
-        <v-text-field
-          v-model="villeDepart"
-          :rules="rules"
-          label="Depart"
-        ></v-text-field>
-        <v-text-field
-          v-model="villeArrivee"
-          :rules="rules"
-          label="Depart"
-        ></v-text-field>
+  <v-container class="fill-height" fluid>
+    <v-sheet class="mx-auto pa-6" width="400" elevation="3" rounded="lg">
+      <h2 class="text-h5 mb-6 text-center">Publier un trajet</h2>
+      <v-form @submit.prevent="handleSubmit">
         <v-autocomplete
-        label="Depart"
-        :items="villes"
-      ></v-autocomplete>
-      <v-autocomplete
-        label="Arrivee"
-        :items="villes"
-      ></v-autocomplete>
-       
-        <v-btn class="mt-2" type="submit" block>Submit</v-btn>
+          v-model="villeDepart"
+          label="Ville de départ"
+          :items="villes"
+          variant="outlined"
+          clearable
+          class="mb-4"
+          density="comfortable"
+          prepend-icon="mdi-city"
+        ></v-autocomplete>
+
+        <v-autocomplete
+          v-model="villeArrivee"
+          label="Ville d'arrivée"
+          :items="villes"
+          variant="outlined"
+          clearable
+          class="mb-4"
+          density="comfortable"
+          prepend-icon="mdi-city"
+        ></v-autocomplete>
+
+
+        <v-text-field
+          v-model="nbrPlaces"
+          label="Nombre de places"
+          type="text"
+          variant="outlined"
+          density="comfortable"
+          class="mb-4"
+          prepend-icon="mdi-account"
+        ></v-text-field>
+
+        <v-text-field
+          v-model="dateTrajet"
+          label="Date du trajet"
+          type="date"
+          variant="outlined"
+          density="comfortable"
+          class="mb-4"
+          prepend-icon="mdi-calendar"
+        ></v-text-field>
+
+        <v-menu
+          v-model="timePicker"
+          :close-on-content-click="false"
+          transition="scale-transition"
+          max-width="300"
+        >
+          <template v-slot:activator="{ props }">
+            <v-text-field
+              v-bind="props"
+              v-model="heureTrajet"
+              label="Heure du trajet"
+              variant="outlined"
+              density="comfortable"
+              class="mb-4"
+              prepend-icon="mdi-clock"
+              readonly
+            ></v-text-field>
+          </template>
+
+          <v-time-picker
+            v-model="heureTrajet"
+            format="24hr"
+            @click:save="timePicker = false"
+            full-width
+          >
+            <v-spacer></v-spacer>
+            <v-btn color="primary" @click="timePicker = false"> OK </v-btn>
+          </v-time-picker>
+        </v-menu>
+
+        <v-btn
+          type="submit"
+          block
+          size="large"
+          color="primary"
+          :disabled="!villeDepart || !villeArrivee || !dateTrajet || !heureTrajet"
+        >
+          Publier
+          <v-icon end icon="mdi-magnify"></v-icon>
+        </v-btn>
       </v-form>
     </v-sheet>
-  </template>
-  <script setup>
-  import { ref, onMounted } from 'vue';
+  </v-container>
+</template>
 
+<script setup>
+import { ref, onMounted } from "vue";
+import api from "../service/api";
+import { VTimePicker } from "vuetify/labs/components";
+import { useRouter } from 'vue-router';
 
-  import api from "../service/api";
-  const trajets = ref([]);
-  const firstName = ref('');
-  const villes = ref([]);
-  
+const router = useRouter();
 
+const timePicker = ref(false);
+const villes = ref([]);
+const villeDepart = ref(null);
+const villeArrivee = ref(null);
+const dateTrajet = ref(new Date().toISOString().substr(0, 10));
+const nbrPlaces = ref(null);
+const heureTrajet = ref(null);
+const userId = localStorage.getItem("userId");
 
-  const fetchTrajets = async () => {
-        try {
-          const response = await api.post(`/trajet/${villeD}/${villeA}/${dateTrajet}`);
-          trajets.value = response.data;
-        } catch (error) {
-          console.error("Erreur lors de la récupération des trajets:", error);
-        }
-      };
+const fetchVilles = async () => {
+  try {
+    const response = await api.get("/ville/listeVilles");
+    villes.value = response.data.map((v) => v.nom);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des villes:", error);
+  }
+};
 
-      const fetchVilles = async () => {
-        try {
-          const response = await api.get("/ville/listeVilles");
+const publierTrajet = async () => {
+  try {
+    const response = await api.post("/trajet/new", {
+      villeDepart: villeDepart.value,
+      villeArrivee: villeArrivee.value,
+      personneId:userId,
+      nbrPlaces: nbrPlaces.value,
+      dateTrajet: `${dateTrajet.value}T${heureTrajet.value}:00`,
+    });
+    console.log("Trajet publié:", response.data);
+    return true; 
+  } catch (error) {
+    console.error("Erreur lors de la publicatiion du trajet:", error);
+    return false;
+  }
+};
 
-          villes.value = response.data.map(v => v.nom); 
-        } catch (error) {
-          console.error("Erreur lors de la récupération des trajets:", error);
-        }
-      };
-  
+const handleSubmit = async () => {
+  if (!villeDepart.value || !villeArrivee.value || !dateTrajet.value || !heureTrajet.value) return;
 
-  
-
-  onMounted(() => {
-  fetchVilles();
-});
+  try {
+    const success = await publierTrajet();
+    if (success) {
+      // Redirect to mes trajets using query param
+      router.push({
+        path: '/accueil?tab=list',
+        
+      });
+    }
+  } catch (error) {
+    console.error("Submission error:", error);
+  }
+};
+// Fetch cities on mount
+onMounted(fetchVilles);
 </script>

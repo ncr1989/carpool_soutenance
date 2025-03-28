@@ -19,7 +19,7 @@ class Personne implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    //relation entre personne et trajet 
+     
     #[ORM\OneToMany(mappedBy: "personne", targetEntity: Trajet::class)]
     private Collection $trajetsProposes;
 
@@ -27,6 +27,10 @@ class Personne implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Trajet::class, inversedBy: 'passagers')]
     #[ORM\JoinTable(name: 'reservations')]
     private Collection $trajetsReserves;
+
+    #[ORM\OneToOne(targetEntity: Voiture::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]  // Ensures voiture_id cannot be NULL
+    private ?Voiture $voiture = null;
 
 
     public function __construct()
@@ -53,6 +57,16 @@ class Personne implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $mdp = null;
 
+    public function getVoiture(): ?Voiture
+    {
+        return $this->voiture;
+    }
+
+    public function setVoiture(?Voiture $voiture): self
+    {
+        $this->voiture = $voiture;
+        return $this;
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -213,6 +227,22 @@ class Personne implements UserInterface, PasswordAuthenticatedUserInterface
     public function setApiToken(?string $apiToken): static
     {
         $this->apiToken = $apiToken;
+
+        return $this;
+    }
+
+    public function addTrajetsReserf(Trajet $trajetsReserf): static
+    {
+        if (!$this->trajetsReserves->contains($trajetsReserf)) {
+            $this->trajetsReserves->add($trajetsReserf);
+        }
+
+        return $this;
+    }
+
+    public function removeTrajetsReserf(Trajet $trajetsReserf): static
+    {
+        $this->trajetsReserves->removeElement($trajetsReserf);
 
         return $this;
     }

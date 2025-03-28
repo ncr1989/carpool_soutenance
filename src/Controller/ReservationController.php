@@ -114,6 +114,7 @@ final class ReservationController extends AbstractController
     public function listeReservations(Personne $personne): JsonResponse
     {
         $trajetsReserves =  $personne->getTrajetsReserves();
+        $trajetsProposes =  $personne->getTrajetsProposes();
 
         $mesTrajetsReserves = [];
         foreach ($trajetsReserves as $trajet) {
