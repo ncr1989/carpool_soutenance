@@ -119,6 +119,7 @@ final class ReservationController extends AbstractController
         $mesTrajetsReserves = [];
         foreach ($trajetsReserves as $trajet) {
             $mesTrajetsReserves[] = [
+                'id'=>$trajet->getId(),
                 'conducteur' => [ "nom" => $trajet->getPersonne()->getNom(),"prenom" => $trajet->getPersonne()->getPrenom()],
                 'villeDepart' => $trajet->getVilleDepart()->getLabel(),
                 'villeArrivee' => $trajet->getVilleArrivee()->getLabel(),

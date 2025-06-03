@@ -1,5 +1,5 @@
 <template>
-  <v-container class="fill-height" fluid>
+  <v-container class="fill-height pt-16" fluid>
     <v-sheet
       v-if="trajets.length === 0"
       class="mx-auto pa-6"
@@ -16,6 +16,7 @@
           variant="outlined"
           clearable
           class="mb-4"
+          prepend-icon="mdi-city"
           density="comfortable"
         ></v-autocomplete>
 
@@ -25,6 +26,7 @@
           :items="villes"
           variant="outlined"
           clearable
+          prepend-icon="mdi-city"
           class="mb-4"
           density="comfortable"
         ></v-autocomplete>
@@ -95,7 +97,6 @@
             <v-expand-transition>
               <div v-show="expanded[trajet.id]">
                 <v-card-text>
-                  <!-- Reservation Status Alert -->
                   <v-alert
                     v-if="reservationStatus[trajet.id]"
                     :type="reservationStatus[trajet.id] === 'Success' ? 'success' : 'error'"
@@ -140,7 +141,7 @@
 
                   <v-container>
                     <v-row>
-                      <v-col cols="3">
+                      <v-col cols="6">
                         <v-btn 
                           color="primary" 
                           class="mt-4 text-body-2" 
@@ -155,29 +156,24 @@
                           Envoyer un Mail
                         </v-btn>
                       </v-col>
-                      <v-col cols="3">
-                        <v-btn color="secondary" class="mt-4 text-body-2" @click="annuler(trajet.id)">
-                          Annuler
-                        </v-btn>
-                      </v-col>
+                     
                     </v-row>
                   </v-container>
                 </v-card-text>
               </div>
             </v-expand-transition>
           </v-card>
-        </v-col>
-      </v-row>
-
-      <!-- No results message -->
-      <v-row v-if="trajets.length === 0" justify="center">
+          <v-row v-if="trajets.length === 0" justify="center">
         <v-col cols="12" class="text-center">
           <v-alert type="info" variant="outlined">
             Aucun trajet trouvé correspondant à vos critères.
           </v-alert>
         </v-col>
       </v-row>
+        </v-col>
+      </v-row>  
     </v-container>
+    
   </v-container>
 </template>
 
@@ -218,6 +214,7 @@ const fetchTrajets = async () => {
       reservationStatus.value[trajet.id] = '';
       reservationMessages.value[trajet.id] = '';
     });
+    
   } catch (error) {
     console.error("Erreur lors de la récupération des trajets:", error);
     trajets.value = [];
@@ -274,16 +271,10 @@ const reserver = async (trajetId) => {
 };
 
 const envoyerMail = (trajet) => {
-  // Placeholder for email sending logic
   console.log('Envoyer un mail pour le trajet:', trajet);
-  alert('Fonctionnalité d\'envoi de mail à implémenter');
+  
 };
 
-const annuler = (trajetId) => {
-  // Placeholder for cancellation logic
-  console.log('Annuler le trajet:', trajetId);
-  alert('Fonctionnalité d\'annulation à implémenter');
-};
 
 onMounted(() => {
   fetchVilles();

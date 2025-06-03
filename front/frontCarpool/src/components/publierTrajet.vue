@@ -1,5 +1,5 @@
 <template>
-  <v-container class="fill-height" fluid>
+  <v-container class="fill-height pt-16" fluid>
     <v-sheet class="mx-auto pa-6" width="400" elevation="3" rounded="lg">
       <h2 class="text-h5 mb-6 text-center">Publier un trajet</h2>
       <v-form @submit.prevent="handleSubmit">

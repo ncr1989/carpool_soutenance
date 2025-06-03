@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="fill-height pa-20">
+  <v-container fluid class="fill-height pt-16">
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="6" lg="4" xl="3">
         <v-card class="pa-4 elevation-2">
@@ -72,13 +72,13 @@
               <v-container>
                 <v-row>
                   <v-col cols="6">
-                    <v-btn color="primary" class="mt-4" block @click="update">
-                      Mettre a jour ma profile
+                    <v-btn color="primary" class="mt-4 text-body-2" block @click="update">
+                      Mettre a jour
                     </v-btn>
                   </v-col>
                   <v-col cols="6">
-                    <v-btn color="primary" class="mt-4" block @click="reset">
-                      Annuler
+                    <v-btn color="primary" class="mt-4 text-body-2" block @click="reset">
+                      Effacer
                     </v-btn>
                   </v-col>
                 </v-row>

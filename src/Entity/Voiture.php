@@ -23,8 +23,9 @@ class Voiture
 
     #[ORM\OneToOne(mappedBy: 'voiture', targetEntity: Personne::class)]
     private ?Personne $personne = null;
-    #[ORM\OneToOne(targetEntity: Marque::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: true)] // Ensures voiture must have a marque
+
+    #[ORM\ManyToOne(targetEntity: Marque::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)] // Ensures voiture must have a marque
     private ?Marque $marque = null;
 
     // Getter and Setter for Marque

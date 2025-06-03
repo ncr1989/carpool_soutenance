@@ -277,6 +277,7 @@ final class TrajetController extends AbstractController
         $mesTrajetsProposes = [];
         foreach ($trajetsProposes as $trajet) {
             $mesTrajetsProposes[] = [
+                'id'=> $trajet->getId(),
                 'conducteur' => [ "nom" => $trajet->getPersonne()->getNom(),"prenom" => $trajet->getPersonne()->getPrenom()],
                 'villeDepart' => $trajet->getVilleDepart()->getLabel(),
                 'villeArrivee' => $trajet->getVilleArrivee()->getLabel(),

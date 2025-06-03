@@ -23,16 +23,16 @@
                   <v-container>
                     <v-row>
                       <v-col cols="3">
-                        <!-- Each button takes 1/3 of the width -->
-                        <v-btn type="submit" color="primary" class="mt-4" block
+                        
+                        <v-btn type="submit" color="primary" class="mt-4 text-body-2" block
                           >Login</v-btn
                         >
                       </v-col>
                       <v-col cols="5">
-                        <v-btn color="primary" class="mt-4" block @click="inscription">Inscription</v-btn>
+                        <v-btn color="primary" class="mt-4 text-body-2" block @click="inscription">Inscription</v-btn>
                       </v-col>
                       <v-col cols="4">
-                        <v-btn color="primary" class="mt-4" block @click="reset">Effacer</v-btn>
+                        <v-btn color="primary" class="mt-4 text-body-2" block @click="reset">Effacer</v-btn>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -77,7 +77,7 @@ export default {
       try {
         const response = await api.post("/login", {
           email: this.email,
-          mdp: this.password, // Ensure this matches your Symfony API
+          mdp: this.password, 
         });
 
         const token = response.data.token;

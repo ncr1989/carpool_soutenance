@@ -9,7 +9,6 @@
         <span class="d-inline d-sm-none">SA</span>
       </v-app-bar-title>
 
-      
       <v-tabs 
         v-model="tab" 
         centered 
@@ -35,15 +34,10 @@
         <v-tab value="account">
           <v-icon icon="mdi-account"></v-icon>
         </v-tab>
-
-       
-        <template #extension>
-         
-        </template>
       </v-tabs>
     </v-app-bar>
 
-    <!-- Mobile Navigation Drawer -->
+    
     <v-navigation-drawer v-model="drawer" temporary location="left" class="d-sm-none">
       <v-list nav density="compact">
         <v-list-item

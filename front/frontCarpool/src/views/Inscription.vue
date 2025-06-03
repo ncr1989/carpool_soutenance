@@ -63,14 +63,19 @@
 
                   <v-container>
                     <v-row>
-                      <v-col cols="6">
-                        <v-btn color="primary" class="mt-4" block @click="inscription">
-                          Valider l'Inscription
+                      <v-col cols="4">
+                        <v-btn color="primary" class="mt-4 text-body-2" block @click="inscription">
+                          Valider 
                         </v-btn>
                       </v-col>
-                      <v-col cols="6">
-                        <v-btn color="primary" class="mt-4" block @click="reset">
+                      <v-col cols="4">
+                        <v-btn color="primary" class="mt-4 text-body-2" block @click="annuler">
                           Annuler
+                        </v-btn>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-btn color="primary" class="mt-4 text-body-2" block @click="reset">
+                          Effacer
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -117,6 +122,11 @@ export default {
       this.marque = "";
       this.showAdditionalFields = false; // Reset checkbox state
       this.$refs.form.resetValidation();
+    },
+
+    annuler(){
+      this.$router.push("/login");
+    
     },
 
     async inscription() {
