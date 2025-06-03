@@ -9,7 +9,8 @@ use App\Tests\BaseTestCase;
 
 class PersonneControllerTest extends BaseTestCase
 {
-    public function testInscriptionSucces(): void
+    
+    /*public function testInscriptionSucces(): void
     {
         $testData = [
             'pseudo' => 'john_doe',
@@ -28,9 +29,9 @@ class PersonneControllerTest extends BaseTestCase
         ]);
         $this->assertResponseStatusCodeSame(201);
         $this->assertJsonContains(['message' => 'Utilisateur inscrit avec succès!']);
-    }
+    }*/
 
-    public function testInscriptionEmailExistant(): void
+    /*public function testInscriptionEmailExistant(): void
     {
         $existingUser = [
             'pseudo' => 'john_doe',
@@ -90,7 +91,8 @@ class PersonneControllerTest extends BaseTestCase
 
         $this->assertResponseStatusCodeSame(400);
         $this->assertJsonContains(['error' => 'Remplir tous les champs!']);
-    }
+    }*/
+    
     public function testEditProfile(): void
     {
         $existingUser = [

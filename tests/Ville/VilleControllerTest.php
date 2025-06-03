@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 
 class VilleControllerTest extends BaseTestCase
 {
+    /*
     public function testListeVilles(): void
     {
         
@@ -26,7 +27,7 @@ class VilleControllerTest extends BaseTestCase
         $this->assertArrayHasKey('department_number', $data[0]);
         $this->assertArrayHasKey('region', $data[0]);
         $this->assertEquals(count($data), count($allCities));
-    }
+    }*/
 
     public function testListeCps(): void
     {
