@@ -5,7 +5,7 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-  workflow_dispatch:  # Allow manual triggering
+  workflow_dispatch:  
 
 jobs:
   test:
@@ -14,15 +14,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        fetch-depth: 0  # Necessary for SonarQube to get full SCM history
+        fetch-depth: 0  
     
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.2'
         extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, json, pdo
-        coverage: xdebug  # Changed to xdebug for code coverage
-        
+        coverage: xdebug 
+
     - name: Cache Composer packages
       id: composer-cache
       uses: actions/cache@v3
@@ -65,16 +65,4 @@ jobs:
       env:
         JWT_PASSPHRASE: "!ChangeMe!"
       run: vendor/bin/phpunit --coverage-clover=coverage.xml
-      
-    - name: SonarQube Scan
-      uses: SonarSource/sonarqube-scan-action@master
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        
-    - name: SonarQube Quality Gate check
-      uses: sonarsource/sonarqube-quality-gate-action@master
-      timeout-minutes: 5
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    

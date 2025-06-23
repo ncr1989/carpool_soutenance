@@ -20,11 +20,6 @@ class TestSetupData extends Fixture implements FixtureGroupInterface
     }
     public function load(ObjectManager $manager):void
     {
-
-
-        //ville objects 
-
-
         $personnes = [['nom' => 'testMe','prenom'=>'Lemon','email'=>'test@gmail.com','pseudo'=>'test', 'mdp' => 'adminpass', 'api_token' => '1009 72']];
         foreach ($personnes as $key => $personne) {
             $objPersonne = new Personne;
@@ -48,10 +43,7 @@ class TestSetupData extends Fixture implements FixtureGroupInterface
         $baye->setLatitude(47.85584953);
         $baye->setLongitude(-3.613231761);
         
-        $baye->setDepartmentName("finistre");
-        $baye->setDepartmentNumber(29);
-        $baye->setRegionName("bretagne");
-        $baye->setRegionGeojsonName("Bretagne");
+        
 
         //bodilis 
         $bodilis->setId(69);
@@ -62,10 +54,6 @@ class TestSetupData extends Fixture implements FixtureGroupInterface
         $bodilis->setLatitude(48.515319658);
         $bodilis->setLongitude(-4.120072961);
         
-        $bodilis->setDepartmentName("finistre");
-        $bodilis->setDepartmentNumber(29);
-        $bodilis->setRegionName("bretagne");
-        $bodilis->setRegionGeojsonName("Bretagne");
 
         //brennillis 
         $brennilis->setId(70);
@@ -76,10 +64,6 @@ class TestSetupData extends Fixture implements FixtureGroupInterface
         $brennilis->setLatitude(48.359908338);
         $brennilis->setLongitude(-3.85090142);
         
-        $brennilis->setDepartmentName("finistre");
-        $brennilis->setDepartmentNumber(29);
-        $brennilis->setRegionName("bretagne");
-        $brennilis->setRegionGeojsonName("Bretagne");
         
 
         $manager->persist($baye);
