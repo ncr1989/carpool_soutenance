@@ -1,20 +1,15 @@
 <template>
   <v-app>
     <v-app-bar extended color="primary" density="compact">
-    
+
       <v-app-bar-nav-icon @click="drawer = !drawer" class="d-sm-none"></v-app-bar-nav-icon>
-      
+
       <v-app-bar-title>
         <span class="d-none d-sm-inline">SlanAbhaile</span>
         <span class="d-inline d-sm-none">SA</span>
       </v-app-bar-title>
 
-      <v-tabs 
-        v-model="tab" 
-        centered 
-        class="d-none d-sm-flex"
-        :grow="$vuetify.display.smAndDown"
-      >
+      <v-tabs v-model="tab" centered class="d-none d-sm-flex" :grow="$vuetify.display.smAndDown">
         <v-tab value="list">
           <span class="d-none d-md-inline">Liste des Trajets</span>
           <v-icon icon="mdi-format-list-bulleted" class="d-md-none"></v-icon>
@@ -37,15 +32,11 @@
       </v-tabs>
     </v-app-bar>
 
-    
+
     <v-navigation-drawer v-model="drawer" temporary location="left" class="d-sm-none">
       <v-list nav density="compact">
-        <v-list-item
-          v-for="item in navItems"
-          :key="item.value"
-          :value="item.value"
-          @click="tab = item.value; drawer = false"
-        >
+        <v-list-item v-for="item in navItems" :key="item.value" :value="item.value"
+          @click="tab = item.value; drawer = false">
           <template v-slot:prepend>
             <v-icon :icon="item.icon"></v-icon>
           </template>
@@ -75,32 +66,27 @@
     </v-main>
 
     <!-- Mobile Bottom Navigation -->
-    <v-bottom-navigation 
-      v-model="tab"
-      grow
-      class="d-sm-none"
-      color="primary"
-    >
+    <v-bottom-navigation v-model="tab" grow class="d-sm-none" color="primary">
       <v-btn value="list">
         <v-icon>mdi-format-list-bulleted</v-icon>
         <span class="text-caption">Liste</span>
       </v-btn>
-      
+
       <v-btn value="search">
         <v-icon>mdi-magnify</v-icon>
         <span class="text-caption">Recherche</span>
       </v-btn>
-      
+
       <v-btn value="my-trips">
         <v-icon>mdi-account-group</v-icon>
         <span class="text-caption">Mes Trajets</span>
       </v-btn>
-      
+
       <v-btn value="publish">
         <v-icon>mdi-plus-circle</v-icon>
         <span class="text-caption">Publier</span>
       </v-btn>
-      
+
       <v-btn value="account">
         <v-icon>mdi-account</v-icon>
         <span class="text-caption">Compte</span>
@@ -119,7 +105,7 @@ import Profile from "../components/profile.vue";
 export default {
   data() {
     return {
-      
+
       tab: this.$route.query.tab || "list",
       drawer: false,
       navItems: [
@@ -132,8 +118,8 @@ export default {
     };
   },
 
-  
-  
+
+
   components: {
     ListeDesTrajets,
     MesTrajets,

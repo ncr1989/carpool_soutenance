@@ -92,16 +92,20 @@ final class PersonneController extends AbstractController
         $immatriculation = $data['immatriculation'];
         $marque = $data['marque'];
         $modele = $data['modele'];
-         $car = new Voiture;
-         $car->setModele($modele);
-         $car->setImmatriculation($immatriculation);
-         $marqueId = $entityManager->getRepository(Marque::class)->findOneBy(['nom'=>$marque]);
+        $car = new Voiture;
+        $car->setModele($modele);
+        $car->setImmatriculation($immatriculation);
+        $marqueId = $entityManager->getRepository(Marque::class)->findOneBy(['nom' => $marque]);
         $car->setMarque($marqueId);
 
 
-        if (empty($email) || empty($mdp) || empty($confirmMdp)|| empty($nom) || empty($prenom)) {
+        if (empty($email) || empty($mdp) || empty($confirmMdp) || empty($nom) || empty($prenom)) {
             return new JsonResponse(['error' => 'Remplir tous les champs!'], JsonResponse::HTTP_BAD_REQUEST);
         }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return new JsonResponse(['error' => 'Adresse e-mail invalide'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+        
         if (!hash_equals($mdp, $confirmMdp)) {
             return new JsonResponse(['error' => 'Mots de passes ne correspondent pas'], JsonResponse::HTTP_BAD_REQUEST);
         }
@@ -223,6 +227,7 @@ final class PersonneController extends AbstractController
 
     #[Route('/getCompte/{id}', name: 'app_personne_getCompte', methods: ['GET'])]
     public function getProfile(Personne $personne): JsonResponse
-    {return new JsonResponse($personne, JsonResponse::HTTP_OK);
+    {
+        return new JsonResponse($personne, JsonResponse::HTTP_OK);
     }
 }

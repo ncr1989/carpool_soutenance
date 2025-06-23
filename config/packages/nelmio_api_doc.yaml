@@ -4,15 +4,14 @@ nelmio_api_doc:
             title: CarpoolApi
             description: Carpool/api
             version: 1.0.0
-        ui:
-            enabled: true
         components:
             securitySchemes:
                 Bearer:
                     type: http
                     scheme: bearer
                     bearerFormat: JWT
-    areas: # to filter documented areas
+
+    areas:
         path_patterns:
-            - ^/api(?!/doc$)         # Keep the /api/doc route for Swagger UI
+            - ^/api(?!/doc$)       # Exclude /api/doc route from API paths
             - ^/api(?!/doc.json$)

@@ -83,7 +83,7 @@ final class LoginController extends AbstractController
      *     )
      * )
      */
-    #[Route('/api/login', name: 'app_login', methods: ['POST','GET'])]
+    #[Route('/api/login', name: 'app_login', methods: ['POST'])]
     public function login(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -95,13 +95,10 @@ final class LoginController extends AbstractController
         }
 
         $user = $this->doctrine->getRepository(Personne::class)->findOneBy(['email' => $email]);
-        if (!$user) {
-            return new JsonResponse(['error' => 'Mdp ou email invalide.'], JsonResponse::HTTP_FORBIDDEN);
-        }
-
-        if (!$this->passwordHasher->isPasswordValid($user, $mdp)) {
-            return new JsonResponse(['error' => 'Invalid email or password.'], JsonResponse::HTTP_UNAUTHORIZED);
-        }
+        
+        if (!$user || !$this->passwordHasher->isPasswordValid($user, $mdp)) {
+        return new JsonResponse(['error' => 'Identifiants invalides'], JsonResponse::HTTP_UNAUTHORIZED);
+    }
 
         $token = $this->jwtManager->create($user);
 
@@ -110,7 +107,6 @@ final class LoginController extends AbstractController
             'token' => $token,
             'id' => $user->getId(),
         ]);
-       
         
     }
 }

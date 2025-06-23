@@ -8,10 +8,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use ApiPlatform\Metadata\ApiResource;
 
 
 
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
+#[ApiResource]
 class Personne implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]

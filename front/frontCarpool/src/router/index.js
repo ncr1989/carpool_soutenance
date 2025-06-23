@@ -15,7 +15,7 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!localStorage.getItem("jwt"); // Check if user is logged in
+  const isAuthenticated = !!localStorage.getItem("jwt"); 
   if (to.meta.requiresAuth && !isAuthenticated) {
     next("/login"); 
   } else {

@@ -9,12 +9,3 @@ api_login_options:
   methods: [OPTIONS]
   controller: Symfony\Bundle\FrameworkBundle\Controller\AbstractController::emptyAction
 
-app.swagger_ui:
-    path: /api/doc
-    methods: GET
-    defaults: { _controller: 'nelmio_api_doc.controller.swagger::__invoke' }
-
-app.swagger:
-    path: /api/doc.json
-    methods: GET
-    defaults: { _controller: 'nelmio_api_doc.controller.swagger_json::__invoke' }

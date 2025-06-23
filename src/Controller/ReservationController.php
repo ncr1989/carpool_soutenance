@@ -18,6 +18,7 @@ final class ReservationController extends AbstractController
      * @OA\Get(
      *     path="/api/reservation/{id}",
      *     summary="Get details of a specific reservation",
+     *     tags={"Reservations"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -76,6 +77,7 @@ final class ReservationController extends AbstractController
      * @OA\Get(
      *     path="/api/reservation/listeReservations/{id}",
      *     summary="Get the list of reservations for a specific person",
+     *     tags={"Reservations"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -135,6 +137,7 @@ final class ReservationController extends AbstractController
      * @OA\Post(
      *     path="/api/reservation/{idPers}/{idTrajet}",
      *     summary="Reserve a spot on a trip for a person",
+     *     tags={"Reservations"},
      *     @OA\Parameter(
      *         name="idPers",
      *         in="path",
@@ -190,6 +193,7 @@ final class ReservationController extends AbstractController
      * @OA\Delete(
      *     path="/api/reservation/annuleReservation/{idPers}/{idTrajet}",
      *     summary="Cancel a reservation for a trip",
+     *     tags={"Reservations"},
      *     @OA\Parameter(
      *         name="idPers",
      *         in="path",

@@ -26,14 +26,13 @@ export default {
   padding: 0;
 }
 
-/* Ensure main content takes full width */
+
 main {
   width: 100%;
   margin: 0;
   padding: 0;
 }
 
-/* Optional: If you still see spacing, add these */
 html, body {
   margin: 0;
   padding: 0;

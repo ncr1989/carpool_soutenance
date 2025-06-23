@@ -53,7 +53,7 @@ final class TrajetController extends AbstractController
                 'villeArrivee' => $trajet->getVilleArrivee()->getLabel(),
                 'villeDepart' => $trajet->getVilleDepart()->getLabel(),
                 'dateTrajet' => $trajet->getDateTrajet()->format('Y-m-d'),
-                'heureTrajet'=> $trajet->getDateTrajet()->format('H:i'),
+                'heureTrajet' => $trajet->getDateTrajet()->format('H:i'),
                 'conducteur' => [$trajet->getPersonne()->getNom(), $trajet->getPersonne()->getPrenom()]
             ];
         }, $trajets);
@@ -119,7 +119,6 @@ final class TrajetController extends AbstractController
         $trajet->setPersonne($personne);
         $entityManager->persist($trajet);
         $entityManager->flush();
-
         return new JsonResponse(['message' => 'Trajet inscrit avec succès!'], JsonResponse::HTTP_CREATED);
     }
 
@@ -196,13 +195,16 @@ final class TrajetController extends AbstractController
             ->createQueryBuilder('t')
             ->where('t.villeDepart = :villeDepart')
             ->andWhere('t.villeArrivee = :villeArrivee')
-            ->andWhere('t.dateTrajet >= :dateTrajet')  
+            ->andWhere('t.dateTrajet >= :dateTrajet')
             ->setParameter('villeDepart', $villeDepart)
             ->setParameter('villeArrivee', $villeArrivee)
             ->setParameter('dateTrajet', $date)
             ->getQuery()
             ->getResult();
 
+        if (empty($trajets)) {
+            return new JsonResponse(['message' => 'Aucun trajet trouvé'], JsonResponse::HTTP_OK);
+        }
         // Transform results to array
         $trajetArray = [];
         foreach ($trajets as $trajet) {
@@ -271,19 +273,19 @@ final class TrajetController extends AbstractController
     #[Route('/listeTrajetsProposes/{id}', name: 'app_trajet_listeTrajetsProposes', methods: ['GET'])]
     public function listeTrajetsProposes(Personne $personne): JsonResponse
     {
-        
+
         $trajetsProposes =  $personne->getTrajetsProposes();
 
         $mesTrajetsProposes = [];
         foreach ($trajetsProposes as $trajet) {
             $mesTrajetsProposes[] = [
-                'id'=> $trajet->getId(),
-                'conducteur' => [ "nom" => $trajet->getPersonne()->getNom(),"prenom" => $trajet->getPersonne()->getPrenom()],
+                'id' => $trajet->getId(),
+                'conducteur' => ["nom" => $trajet->getPersonne()->getNom(), "prenom" => $trajet->getPersonne()->getPrenom()],
                 'villeDepart' => $trajet->getVilleDepart()->getLabel(),
                 'villeArrivee' => $trajet->getVilleArrivee()->getLabel(),
                 'nombrePlaces' => $trajet->getNbrPlaces(),
                 'dateTrajet' => $trajet->getDateTrajet()->format('Y-m-d'),
-                'heureTrajet'=> $trajet->getDateTrajet()->format('H:i'),
+                'heureTrajet' => $trajet->getDateTrajet()->format('H:i'),
             ];
         }
         return new JsonResponse($mesTrajetsProposes, JsonResponse::HTTP_OK);
@@ -311,23 +313,22 @@ final class TrajetController extends AbstractController
      * )
      */
     #[Route('/{id}', name: 'app_trajet_supprimeTrajet', methods: ['DELETE'])]
-    public function deleteTrajetProposes(Request $request, Trajet $trajet, EntityManagerInterface $entityManager,Mailer $mailer): JsonResponse
+    public function deleteTrajetProposes(Request $request, Trajet $trajet, EntityManagerInterface $entityManager, Mailer $mailer): JsonResponse
     {
 
-        
+
         $entityManager->remove($trajet);
         //$mailer->sendEmail( $trajet);
         $entityManager->flush();
         return new JsonResponse(['Succés' => 'Trajet supprime.'], JsonResponse::HTTP_OK);
-       
     }
 
 
     #[Route('/{id}', name: 'app_reservation_detailsTrajet', methods: ['GET'])]
     public function detailsTrajet(Trajet $trajet, EntityManagerInterface $entityManager): JsonResponse
     {
-        if (!$trajet) {
-            return new JsonResponse(['error' => 'Trajet not found'], JsonResponse::HTTP_NOT_FOUND);
+        if (!$trajet) { 
+            return new JsonResponse(['error' => ' Aucun trajet trouvé'], JsonResponse::HTTP_NOT_FOUND);
         }
         $trajetRecherche = [
             'id' => $trajet->getId(),
