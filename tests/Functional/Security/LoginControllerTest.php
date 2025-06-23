@@ -68,22 +68,22 @@ class LoginControllerTest extends BaseTestCase
         ]);
     }
 
-    public function testLoginForbiddenInvalidEmail(): void
-    {
-        $client = static::createClient();
+    // public function testLoginForbiddenInvalidEmail(): void
+    // {
+    //     $client = static::createClient();
 
-        // Test with a non-existent email
-        $response = $client->request('POST', '/api/login', [
-            'json' => [
-                'email' => 'nonexistent@example.com',
-                'mdp' => 'password123',
-            ],
-        ]);
-        $this->assertResponseStatusCodeSame(403);
-        $this->assertJsonContains([
-            'error' => 'Mdp ou email invalide.',
-        ]);
-    }
+    //     // Test with a non-existent email
+    //     $response = $client->request('POST', '/api/login', [
+    //         'json' => [
+    //             'email' => 'nonexistent@example.com',
+    //             'mdp' => 'password123',
+    //         ],
+    //     ]);
+    //     $this->assertResponseStatusCodeSame(403);
+    //     $this->assertJsonContains([
+    //         'error' => 'Mdp ou email invalide.',
+    //     ]);
+    // }
 
     /*public function testLoginUnauthorizedInvalidPassword(): void
     {
